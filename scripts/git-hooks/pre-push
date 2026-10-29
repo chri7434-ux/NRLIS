@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+zero_sha="0000000000000000000000000000000000000000"
+
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [[ "${remote_ref}" != "refs/heads/main" ]]; then
+    continue
+  fi
+  if [[ "${local_sha}" == "${zero_sha}" ]]; then
+    echo "Blocked deletion of protected branch main." >&2
+    exit 1
+  fi
+  if [[ "${NRLIS_ALLOW_MAIN_PUSH:-0}" == "1" ]]; then
+    echo "WARNING: documented main-push recovery override is active." >&2
+    continue
+  fi
+
+  echo "Blocked direct push to main." >&2
+  echo "Push a feature branch and merge it through a pull request." >&2
+  echo "Only a documented recovery may set NRLIS_ALLOW_MAIN_PUSH=1." >&2
+  exit 1
+done

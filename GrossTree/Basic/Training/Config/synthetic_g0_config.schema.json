@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nrlis.local/schemas/synthetic-g0-config.schema.json",
+  "title": "NRLIS synthetic G0 deterministic baseline configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "config_id",
+    "config_version",
+    "baseline_id",
+    "output_enabled",
+    "top_k",
+    "abstain_input_quality_codes",
+    "candidate_bank"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "data_classification": {
+      "const": "synthetic_no_participant_data"
+    },
+    "config_id": {
+      "type": "string",
+      "pattern": "^SYN-CFG-[A-Z0-9-]+$"
+    },
+    "config_version": {
+      "type": "string"
+    },
+    "baseline_id": {
+      "const": "deterministic_fixed_bank_rule_baseline"
+    },
+    "output_enabled": {
+      "const": false
+    },
+    "top_k": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "abstain_input_quality_codes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "candidate_bank": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "semantic_id",
+            "raw_score",
+            "probability"
+          ],
+          "properties": {
+            "semantic_id": {
+              "type": "string",
+              "pattern": "^SYN-SEM-[0-9]{4}$"
+            },
+            "raw_score": {
+              "type": "number"
+            },
+            "probability": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

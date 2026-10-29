@@ -1,0 +1,28 @@
+{
+  "task_id": "NRLIS-SMOKE-001",
+  "provenance_level": "legacy_partial",
+  "test_type": "live bounded collaboration smoke test",
+  "status": "passed",
+  "observed_time": "2026-07-29 17:24 EDT",
+  "bridge_version": "0.2.0",
+  "run_id": "2d03a82e-335b-4af8-9361-8604400ca0a9",
+  "requested_model": "grok-4.5",
+  "requested_reasoning_effort": "high",
+  "source_mode": "temporary_read_only_snapshot",
+  "snapshot_files": [
+    "AGENTS.md",
+    "GrossTree/__init__/PROJECT_CHARTER.md",
+    "README.md"
+  ],
+  "snapshot_file_count": 3,
+  "snapshot_total_bytes": 13463,
+  "web_search_enabled": false,
+  "subagents_enabled": false,
+  "live_repository_write_access": false,
+  "restricted_path_check": "passed",
+  "notes": [
+    "The static phase rejected the participant-specific profile path as required.",
+    "The live review returned schema-valid structured output and explicit model/reasoning request metadata.",
+    "The strict sandbox denied unrelated local Claude settings hook reads; the review completed without access to them."
+  ]
+}

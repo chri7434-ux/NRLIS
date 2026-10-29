@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nrlis.local/schemas/synthetic-g0-fixture.schema.json",
+  "title": "NRLIS synthetic G0 fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "data_classification",
+    "fixture_id",
+    "logical_time_block",
+    "experiment_manifest",
+    "attempts"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "data_classification": {
+      "const": "synthetic_no_participant_data"
+    },
+    "fixture_id": {
+      "type": "string",
+      "pattern": "^SYN-FIX-[A-Z0-9-]+$"
+    },
+    "logical_time_block": {
+      "type": "string"
+    },
+    "experiment_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "protocol_id",
+        "development_session_ids",
+        "calibration_session_ids",
+        "prospective_shadow_session_ids"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^SYN-P[0-9]{3}$"
+        },
+        "protocol_id": {
+          "type": "string",
+          "pattern": "^SYN-T[0-9]{3}$"
+        },
+        "development_session_ids": {
+          "$ref": "#/$defs/sessionIds"
+        },
+        "calibration_session_ids": {
+          "$ref": "#/$defs/sessionIds"
+        },
+        "prospective_shadow_session_ids": {
+          "$ref": "#/$defs/sessionIds"
+        }
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "attempt_id",
+          "session_id",
+          "event_order",
+          "task_family",
+          "input_record_ids",
+          "observable_signal_code",
+          "input_quality_code",
+          "reference_semantic_id",
+          "reference_source",
+          "reference_timing",
+          "scoring_eligible",
+          "training_eligible",
+          "authorship_claim_eligible",
+          "ambiguity_status",
+          "usable_attempt",
+          "cancelled",
+          "exclusion_reason",
+          "environment_code",
+          "fatigue_state",
+          "surface_relation",
+          "semantic_relation",
+          "partner_familiarity",
+          "personal_vocabulary",
+          "speech_variability_state",
+          "abstention_expected",
+          "challenge_eligible"
+        ],
+        "properties": {
+          "attempt_id": {
+            "type": "string",
+            "pattern": "^SYN-A[0-9]{4}$"
+          },
+          "session_id": {
+            "type": "string",
+            "pattern": "^SYN-S[0-9]{4}$"
+          },
+          "event_order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "task_family": {
+            "enum": [
+              "T0_ACCESS_CONTROL",
+              "T1_PROMPTED_KNOWN",
+              "T2_HELDOUT_PARAPHRASE",
+              "T3_NATURALISTIC"
+            ]
+          },
+          "input_record_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^SYN-R[0-9]{8}$"
+            }
+          },
+          "observable_signal_code": {
+            "enum": [
+              "signal_a",
+              "signal_b",
+              "signal_c",
+              "signal_d"
+            ]
+          },
+          "input_quality_code": {
+            "enum": [
+              "usable",
+              "unstable"
+            ]
+          },
+          "reference_semantic_id": {
+            "type": "string",
+            "pattern": "^SYN-SEM-[0-9]{4}$"
+          },
+          "reference_source": {
+            "const": "synthetic_oracle"
+          },
+          "reference_timing": {
+            "const": "pre_reveal"
+          },
+          "scoring_eligible": {
+            "type": "boolean"
+          },
+          "training_eligible": {
+            "const": false
+          },
+          "authorship_claim_eligible": {
+            "const": false
+          },
+          "ambiguity_status": {
+            "enum": [
+              "none",
+              "synthetic_challenge"
+            ]
+          },
+          "usable_attempt": {
+            "type": "boolean"
+          },
+          "cancelled": {
+            "type": "boolean"
+          },
+          "exclusion_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "environment_code": {
+            "type": "string"
+          },
+          "fatigue_state": {
+            "type": "string"
+          },
+          "surface_relation": {
+            "enum": [
+              "exact_seen",
+              "unseen_paraphrase"
+            ]
+          },
+          "semantic_relation": {
+            "enum": [
+              "seen",
+              "unseen"
+            ]
+          },
+          "partner_familiarity": {
+            "enum": [
+              "familiar",
+              "unfamiliar"
+            ]
+          },
+          "personal_vocabulary": {
+            "type": "boolean"
+          },
+          "speech_variability_state": {
+            "type": "string"
+          },
+          "abstention_expected": {
+            "type": "boolean"
+          },
+          "challenge_eligible": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sessionIds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^SYN-S[0-9]{4}$"
+      }
+    }
+  }
+}

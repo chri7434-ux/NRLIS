@@ -1,0 +1,50 @@
+{
+  "config_id": "NRLIS-PFNN-v0",
+  "config_version": "0.1.0",
+  "data_classification": "synthetic_no_participant_data",
+  "claim_boundary": "participant_free_neural_training_plumbing_only",
+  "seed": 20260904,
+  "labels": [
+    "SYN-SEM-WATER",
+    "SYN-SEM-PAIN",
+    "SYN-SEM-REPOSITION",
+    "SYN-SEM-OTHER"
+  ],
+  "input": {
+    "kind": "synthetic_acoustic_embedding",
+    "dimensions": 4,
+    "samples_per_label": {
+      "development": 24,
+      "calibration": 8,
+      "test": 12
+    },
+    "noise_scale": 0.4,
+    "class_centers": {
+      "SYN-SEM-WATER": [1.0, 0.0, 0.0, 0.2],
+      "SYN-SEM-PAIN": [0.0, 1.0, 0.1, 0.0],
+      "SYN-SEM-REPOSITION": [0.0, 0.1, 1.0, 0.0],
+      "SYN-SEM-OTHER": [-0.7, -0.6, -0.6, 0.8]
+    }
+  },
+  "model": {
+    "family": "two_layer_mlp",
+    "hidden_units": 8,
+    "epochs": 350,
+    "learning_rate": 0.05,
+    "l2": 0.0005
+  },
+  "calibration": {
+    "method": "temperature_grid",
+    "temperature_grid": [0.5, 0.75, 1.0, 1.25, 1.5, 2.0, 2.5]
+  },
+  "abstention": {
+    "minimum_probability": 0.65,
+    "minimum_margin": 0.25
+  },
+  "safety": {
+    "participant_data_permitted": false,
+    "participant_specific_inference_permitted": false,
+    "candidate_reveal_permitted": false,
+    "output_action": "no_action_shadow_only"
+  }
+}

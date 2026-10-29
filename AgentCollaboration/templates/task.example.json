@@ -1,0 +1,23 @@
+{
+  "task_id": "NRLIS-COLLAB-001",
+  "question": "Does the proposed evaluation claim remain within the current pre-data and G2 boundaries?",
+  "paths": [
+    "README.md",
+    "GrossTree/__init__/PROJECT_CHARTER.md",
+    "GrossTree/__init__/GENERALIZATION_BOUNDARIES.md",
+    "GrossTree/__init__/EVALUATION_SAFETY_GOVERNANCE.md"
+  ],
+  "requested_tool": "grok_methodology_audit",
+  "claim_boundary": "Protocol design only; no participant, clinical efficacy, diagnostic, or cross-person claim.",
+  "prohibited_actions": [
+    "Do not modify files.",
+    "Do not infer participant facts.",
+    "Do not use web search.",
+    "Do not weaken consent, confirmation, or shadow-mode gates."
+  ],
+  "acceptance_checks": [
+    "Every finding cites a supplied repository path and locator.",
+    "Observation, inference, and hypothesis remain separate.",
+    "Any G2-or-higher overclaim is flagged."
+  ]
+}

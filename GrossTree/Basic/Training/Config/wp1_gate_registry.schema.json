@@ -1,0 +1,787 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-nrlis.local/schemas/wp1_gate_registry.schema.json",
+  "title": "NRLIS WP1 gate registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "registry_version",
+    "work_package",
+    "status",
+    "last_reviewed",
+    "earned_claim_level",
+    "participant_evidence_level",
+    "determination_scope",
+    "authorizations",
+    "consent_scopes",
+    "external_authorities",
+    "external_evidence_records",
+    "training_records",
+    "roles",
+    "gates",
+    "active_holds",
+    "exit_rule"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.2"
+    },
+    "registry_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "work_package": {
+      "const": "WP1"
+    },
+    "status": {
+      "enum": [
+        "open_blocked_external_determinations",
+        "complete",
+        "failed"
+      ]
+    },
+    "last_reviewed": {
+      "type": "string",
+      "format": "date"
+    },
+    "earned_claim_level": {
+      "const": "G0_component_verified_synthetic_only"
+    },
+    "participant_evidence_level": {
+      "const": "none"
+    },
+    "determination_scope": {
+      "$ref": "#/$defs/determinationScope"
+    },
+    "authorizations": {
+      "type": "object",
+      "minProperties": 21,
+      "maxProperties": 21,
+      "propertyNames": {
+        "$ref": "#/$defs/activityName"
+      },
+      "additionalProperties": {
+        "type": "boolean"
+      }
+    },
+    "consent_scopes": {
+      "type": "object",
+      "minProperties": 21,
+      "maxProperties": 21,
+      "propertyNames": {
+        "$ref": "#/$defs/activityName"
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/consentStatus"
+      }
+    },
+    "external_authorities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/externalAuthority"
+      }
+    },
+    "external_evidence_records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/externalEvidence"
+      }
+    },
+    "training_records": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/trainingRecord"
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "$ref": "#/$defs/role"
+      }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 25,
+      "maxItems": 25,
+      "items": {
+        "$ref": "#/$defs/gate"
+      }
+    },
+    "active_holds": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^HOLD-[A-Z0-9._-]+$"
+      },
+      "uniqueItems": true
+    },
+    "exit_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_gate_ids",
+        "required_role_ids",
+        "acceptable_gate_statuses",
+        "wp1_exit_authorized",
+        "activity_authorization_inherited"
+      ],
+      "properties": {
+        "required_gate_ids": {
+          "type": "array",
+          "minItems": 25,
+          "maxItems": 25,
+          "items": {
+            "$ref": "#/$defs/gateId"
+          },
+          "uniqueItems": true
+        },
+        "required_role_ids": {
+          "type": "array",
+          "minItems": 7,
+          "maxItems": 7,
+          "items": {
+            "$ref": "#/$defs/roleId"
+          },
+          "uniqueItems": true
+        },
+        "acceptable_gate_statuses": {
+          "const": [
+            "satisfied"
+          ]
+        },
+        "wp1_exit_authorized": {
+          "type": "boolean"
+        },
+        "activity_authorization_inherited": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "gateId": {
+      "type": "string",
+      "pattern": "^WP1-G[0-9]{2}$"
+    },
+    "roleId": {
+      "type": "string",
+      "pattern": "^ROLE-[A-Z0-9-]+$"
+    },
+    "holderId": {
+      "type": "string",
+      "pattern": "^HOLDER-[A-Z0-9._-]+$"
+    },
+    "authorityId": {
+      "type": "string",
+      "pattern": "^AUTH-EXT-[A-Z0-9._-]+$"
+    },
+    "activityName": {
+      "enum": [
+        "research_contact",
+        "pre_consent_access_check",
+        "enrollment",
+        "participant_facing_intake",
+        "non_recorded_capability_assessment",
+        "audio_recording",
+        "video_recording",
+        "raw_gaze_recording",
+        "derived_gaze_collection",
+        "historical_media_ingest",
+        "participant_data_training",
+        "participant_specific_inference",
+        "shadow_inference",
+        "candidate_reveal",
+        "voice_clone_training",
+        "voice_rendering",
+        "message_transmission",
+        "demonstration",
+        "publication_examples",
+        "external_data_sharing",
+        "future_secondary_use"
+      ]
+    },
+    "consentStatus": {
+      "enum": [
+        "not_authorized",
+        "authorized",
+        "declined",
+        "withdrawn",
+        "not_applicable",
+        "expired"
+      ]
+    },
+    "determinationScope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manifest_version",
+        "protocol_id",
+        "protocol_version",
+        "document_paths",
+        "scope_sha256"
+      ],
+      "properties": {
+        "manifest_version": {
+          "const": "1.1"
+        },
+        "protocol_id": {
+          "const": "NRLIS-T001"
+        },
+        "protocol_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$"
+        },
+        "document_paths": {
+          "type": "array",
+          "minItems": 10,
+          "maxItems": 10,
+          "items": {
+            "type": "string",
+            "minLength": 8
+          },
+          "uniqueItems": true
+        },
+        "scope_sha256": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/sha256"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "externalAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_id",
+        "authority_name",
+        "authority_type",
+        "jurisdiction",
+        "official_uri",
+        "verification_artifact_sha256",
+        "external_system_record_id_sha256",
+        "status",
+        "verified_on",
+        "review_due_on",
+        "expires_on",
+        "revoked_on"
+      ],
+      "properties": {
+        "authority_id": {
+          "$ref": "#/$defs/authorityId"
+        },
+        "authority_name": {
+          "type": "string",
+          "minLength": 2
+        },
+        "authority_type": {
+          "enum": [
+            "institutional_irb_or_hrpp",
+            "relying_institution",
+            "privacy_or_security_office",
+            "device_regulatory_authority",
+            "legal_or_jurisdictional_authority",
+            "training_provider",
+            "independent_project_governance_body",
+            "other_documented_authority"
+          ]
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 2
+        },
+        "official_uri": {
+          "type": "string",
+          "format": "uri"
+        },
+        "verification_artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "external_system_record_id_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "verified",
+            "expired",
+            "revoked"
+          ]
+        },
+        "verified_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "review_due_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "expires_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "revoked_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "externalEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "issuer_authority_id",
+        "record_type",
+        "decision_outcome",
+        "artifact_sha256",
+        "external_system_record_id_sha256",
+        "protocol_id",
+        "protocol_version",
+        "scope_sha256",
+        "covered_gate_ids",
+        "covered_role_ids",
+        "subject_holder_id",
+        "status",
+        "effective_on",
+        "review_due_on",
+        "expires_on",
+        "revoked_on",
+        "recorded_by_role_id",
+        "recorded_by_holder_id"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^EXT-[A-Z0-9._-]+$"
+        },
+        "issuer_authority_id": {
+          "$ref": "#/$defs/authorityId"
+        },
+        "record_type": {
+          "enum": [
+            "human_research_determination",
+            "ethics_approval",
+            "institutional_engagement_determination",
+            "reliance_or_authorization_agreement",
+            "site_or_jurisdiction_determination",
+            "device_or_ide_determination",
+            "privacy_or_health_data_determination",
+            "role_appointment",
+            "independence_review",
+            "role_combination_approval",
+            "research_care_boundary_approval",
+            "consent_process_approval",
+            "capacity_and_lar_pathway_approval",
+            "conflict_management_approval",
+            "role_verification",
+            "training_verification",
+            "risk_or_safety_approval",
+            "data_governance_approval",
+            "incident_response_approval",
+            "activity_scope_approval",
+            "independent_exit_review",
+            "other_scoped_governance_record"
+          ]
+        },
+        "decision_outcome": {
+          "enum": [
+            "requirements_satisfied",
+            "not_applicable",
+            "rejected"
+          ]
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "external_system_record_id_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "protocol_id": {
+          "const": "NRLIS-T001"
+        },
+        "protocol_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$"
+        },
+        "scope_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "covered_gate_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gateId"
+          },
+          "uniqueItems": true
+        },
+        "covered_role_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roleId"
+          },
+          "uniqueItems": true
+        },
+        "subject_holder_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/holderId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "active",
+            "expired",
+            "revoked",
+            "superseded"
+          ]
+        },
+        "effective_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_due_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "expires_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "revoked_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "recorded_by_role_id": {
+          "$ref": "#/$defs/roleId"
+        },
+        "recorded_by_holder_id": {
+          "$ref": "#/$defs/holderId"
+        }
+      }
+    },
+    "trainingRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_id",
+        "holder_id",
+        "training_type",
+        "covered_role_ids",
+        "issuer_authority_id",
+        "artifact_sha256",
+        "external_system_record_id_sha256",
+        "status",
+        "completed_on",
+        "review_due_on",
+        "expires_on",
+        "revoked_on"
+      ],
+      "properties": {
+        "record_id": {
+          "type": "string",
+          "pattern": "^TRAIN-[A-Z0-9._-]+$"
+        },
+        "holder_id": {
+          "$ref": "#/$defs/holderId"
+        },
+        "training_type": {
+          "enum": [
+            "human_research_protection",
+            "protocol_accountability",
+            "conflict_of_interest",
+            "institutional_ethics_process",
+            "accessible_consent_and_capacity",
+            "accessible_communication_and_aac",
+            "participant_safety",
+            "privacy_data_security",
+            "authorship_and_output_safety",
+            "incident_response",
+            "adverse_event_and_authorship_review"
+          ]
+        },
+        "covered_role_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/roleId"
+          },
+          "uniqueItems": true
+        },
+        "issuer_authority_id": {
+          "$ref": "#/$defs/authorityId"
+        },
+        "artifact_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "external_system_record_id_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "enum": [
+            "valid",
+            "expired",
+            "revoked",
+            "superseded"
+          ]
+        },
+        "completed_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_due_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "expires_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "revoked_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "role": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "role_id",
+        "status",
+        "holder_id",
+        "appointment_record_id",
+        "training_record_ids",
+        "required_training_types",
+        "independence_required",
+        "independence_record_id",
+        "must_be_distinct_from_role_ids",
+        "combination_approval_record_id",
+        "expires_on"
+      ],
+      "properties": {
+        "role_id": {
+          "$ref": "#/$defs/roleId"
+        },
+        "status": {
+          "enum": [
+            "unassigned",
+            "assigned_pending_verification",
+            "verified",
+            "expired",
+            "revoked"
+          ]
+        },
+        "holder_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/holderId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "appointment_record_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^EXT-[A-Z0-9._-]+$"
+        },
+        "training_record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^TRAIN-[A-Z0-9._-]+$"
+          },
+          "uniqueItems": true
+        },
+        "required_training_types": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "minLength": 3
+          },
+          "uniqueItems": true
+        },
+        "independence_required": {
+          "type": "boolean"
+        },
+        "independence_record_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^EXT-[A-Z0-9._-]+$"
+        },
+        "must_be_distinct_from_role_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/roleId"
+          },
+          "uniqueItems": true
+        },
+        "combination_approval_record_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^EXT-[A-Z0-9._-]+$"
+        },
+        "expires_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_id",
+        "domain",
+        "requirement",
+        "status",
+        "evidence_record_ids",
+        "recorded_by_role_id",
+        "recorded_by_holder_id",
+        "issuing_authority_ids",
+        "decided_on",
+        "review_due_on",
+        "expires_on",
+        "notes"
+      ],
+      "properties": {
+        "gate_id": {
+          "$ref": "#/$defs/gateId"
+        },
+        "domain": {
+          "enum": [
+            "applicability",
+            "research_care_boundary",
+            "risk",
+            "consent",
+            "roles",
+            "conflict",
+            "data",
+            "incident",
+            "activity_scope",
+            "independent_exit_review"
+          ]
+        },
+        "requirement": {
+          "type": "string",
+          "minLength": 12
+        },
+        "status": {
+          "enum": [
+            "unresolved",
+            "in_progress",
+            "satisfied",
+            "failed",
+            "expired"
+          ]
+        },
+        "evidence_record_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^EXT-[A-Z0-9._-]+$"
+          },
+          "uniqueItems": true
+        },
+        "recorded_by_role_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/roleId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recorded_by_holder_id": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/holderId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "issuing_authority_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/authorityId"
+          },
+          "uniqueItems": true
+        },
+        "decided_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "review_due_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "expires_on": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,175 @@
+project:
+  id: NRLIS
+  config_version: "1.1.0"
+  status: preparticipant_synthetic_g0_verified
+  intended_use: investigational_assistive_communication
+  earned_claim_level: G0_component_verified_synthetic_only
+  participant_evidence_level: none
+  target_claim_ceiling: G2_within_person_prospective
+
+contracts:
+  objective_and_roadmap_version: "0.6"
+  project_charter_version: "0.3"
+  generalization_boundaries_version: "0.2"
+  evaluation_safety_governance_version: "0.2"
+  wp1_governance_plan_version: "0.4"
+  accessible_consent_plan_version: "0.2"
+  wp1_gate_registry_version: "0.3.0"
+  wp1_gate_registry_schema_version: "1.2"
+  wp1_scope_manifest_version: "1.1"
+  task_reference_authorship_sop_version: "0.2"
+  t001_analysis_spec_version: "0.2.1"
+  data_contract_version: "0.5"
+  data_management_withdrawal_plan_version: "0.2"
+  metrics_version: "0.2"
+  workflow_and_algorithms_version: "0.4"
+
+participant:
+  profile_id: NRLIS-P001
+  profile_version: "0.0"
+  enrollment_status: not_enrolled
+
+protocol:
+  id: NRLIS-T001
+  version: "0.3"
+  mode: shadow_only
+  authorization_semantics: deny_only_interlock
+  output_enabled: false
+  enrollment_open: false
+  participant_recording_enabled: false
+  stage_d_enabled: false
+
+governance:
+  wp1_authoritative_registry: GrossTree/Basic/Training/Config/wp1_gate_registry.json
+  wp1_semantic_validator: GrossTree/Basic/Training/Implementation/validate_wp1.py
+  activity_authorization_inherited: false
+
+boundaries:
+  diagnosis_enabled: false
+  thought_reading_claim_enabled: false
+  high_risk_generation_enabled: false
+  unsupervised_personal_update_enabled: false
+  bci_core_enabled: false
+  semg_core_enabled: false
+  eeg_core_enabled: false
+
+routing:
+  capability_profile_required: true
+  independent_confirmation_required: true
+  fallback_required: true
+  candidate_controls:
+    - none_of_these
+    - repeat
+    - cancel
+    - non_predictive_fallback
+
+participant_free_engineering:
+  state: active
+  data_classification: synthetic_no_participant_data
+  synthetic_intent_adapter_config: GrossTree/Basic/Training/Config/synthetic_intent_adapter_v0.json
+  synthetic_intent_adapter_implementation: GrossTree/Basic/Training/Implementation/synthetic_intent_adapter.py
+  synthetic_intent_adapter_mode: sealed_synthetic_verification_only
+  neural_baseline_config: GrossTree/Basic/Training/Config/participant_free_neural_v0.json
+  neural_baseline_implementation: GrossTree/Basic/Training/Implementation/participant_free_neural.py
+  recording_intake_schema: GrossTree/Basic/Training/Dataset/recording_intake_v0.schema.json
+  recording_intake_validator: GrossTree/Basic/Training/Implementation/validate_recording_intake.py
+  recording_intake_mode: synthetic_fixture_check_only
+  care_aac_mvp: GrossTree/Basic/CareAAC/index.html
+  care_aac_version: "0.2.0"
+  care_aac_mode: care_nonresearch_no_capture
+  care_aac_research_reuse: prohibited
+  care_vocabulary_schema: GrossTree/Basic/CareAAC/synthetic_vocabulary_v1.schema.json
+  care_vocabulary: GrossTree/Basic/CareAAC/synthetic_vocabulary_v1.js
+  care_interaction_core: GrossTree/Basic/CareAAC/interaction_core.js
+  care_interaction_scenarios: GrossTree/Basic/CareAAC/synthetic_interactions_v1.json
+  care_architecture_validator: GrossTree/Basic/CareAAC/validate_care_architecture.py
+  claim_boundary: participant_free_neural_training_plumbing_only
+  participant_inputs_permitted: false
+  participant_claims_permitted: false
+
+model:
+  foundation_encoder: null
+  personal_adapter: null
+  task_head: null
+  dialect_layer: null
+  context_reranker: null
+  calibration_method: null
+  abstention_policy: null
+  reason_disabled: participant_activity_and_model_authorizations_absent
+
+learning:
+  potentially_eligible_reference_sources:
+    - participant_independent_pre_reveal
+    - known_prompt_participant_accepted
+  source_rank_alone_confers_eligibility: false
+  post_reveal_selection_as_scoring_reference: false
+  post_reveal_selection_training_enabled: false
+  caregiver_interpretation_as_ground_truth: false
+  researcher_inference_as_ground_truth: false
+  model_output_as_ground_truth: false
+
+evaluation:
+  random_utterance_split_permitted_for_generalization: false
+  chronological_split_required_for_g2: true
+  session_level_reporting_required: true
+  shadow_primary_outcomes:
+    - unconditional_top_k_semantic_coverage
+    - hazardous_non_abstention_rate
+    - selective_risk
+    - abstention_safety
+    - brier_score
+    - expected_calibration_error
+    - inference_latency
+  shadow_secondary_outcomes:
+    - conditional_top_k_semantic_coverage
+    - counterfactual_top1_error_rate
+  synthetic_g0_verification:
+    status: passed
+    fixture_classification: synthetic_no_participant_data
+    participant_performance_claim: false
+    inference_latency_static_fixture_status: not_evaluable
+    prohibited_output_bypass_count: 0
+  not_estimable_in_shadow:
+    - successful_message_rate
+    - participant_time_to_message
+    - actual_candidate_selection_effort
+    - actual_misattribution_rate
+    - fallback_success
+  stage_d_gate_registry:
+    minimum_sessions: null
+    minimum_eligible_attempts: null
+    minimum_attempts_per_task_family: null
+    minimum_attempts_per_required_novelty_class: null
+    minimum_partner_shift_attempts: null
+    minimum_environment_shift_attempts: null
+    minimum_fatigue_or_condition_shift_attempts: null
+    minimum_total_challenge_attempts: null
+    minimum_attempts_per_required_challenge_class: null
+    maximum_missingness: null
+    fixed_k: null
+    minimum_unconditional_top_k_coverage: null
+    maximum_hazardous_non_abstention_rate: null
+    maximum_selective_risk: null
+    minimum_challenge_abstention_sensitivity: null
+    maximum_false_abstention_rate: null
+    calibration_minimum_sample: null
+    maximum_calibration_error: null
+    baseline_comparison_margin: null
+    baseline_comparison_direction: null
+    binomial_interval_method: null
+    task_registry_sha256: null
+    split_manifest_sha256: null
+    analysis_artifact_sha256: null
+    thresholds_locked_at: null
+    thresholds_locked_by: null
+    independent_reviewer_approval: null
+  stage_d_blocked_reason: numerical_and_analysis_gates_not_frozen
+
+safety:
+  unconfirmed_output_limit: 0
+  serious_authorship_event_limit: 0
+  high_risk_generated_output_limit: 0
+  unprovenanced_training_label_limit: 0
+  participant_cancel_required: true
+  emergency_sole_channel_permitted: false
+  acute_change_check_required_each_session: true

@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nrlis.local/schemas/collaboration-provenance.schema.json",
+  "title": "NRLIS collaboration provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "provenance_level",
+    "bridge_version",
+    "run_id",
+    "source_mode",
+    "snapshot_file_count",
+    "snapshot_total_bytes",
+    "web_search_enabled",
+    "subagents_enabled",
+    "live_repository_write_access"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "provenance_level": {
+      "enum": [
+        "legacy_partial",
+        "complete_v1"
+      ]
+    },
+    "test_type": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "observed_time": {
+      "type": "string"
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "bridge_version": {
+      "type": "string"
+    },
+    "run_id": {
+      "type": "string"
+    },
+    "requested_tool": {
+      "enum": [
+        "grok_project_review",
+        "grok_compare_hypotheses",
+        "grok_methodology_audit"
+      ]
+    },
+    "requested_model": {
+      "type": "string"
+    },
+    "observed_cli_default_model_after_review": {
+      "type": "string"
+    },
+    "requested_reasoning_effort": {
+      "type": "string"
+    },
+    "repository_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "source_worktree_state": {
+      "enum": [
+        "clean",
+        "dirty"
+      ]
+    },
+    "task_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "effective_config_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "bridge_code_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "task_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "review_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "provenance_schema_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "snapshot_manifest_sha256": {
+      "$ref": "#/$defs/sha256"
+    },
+    "source_mode": {
+      "const": "temporary_read_only_snapshot"
+    },
+    "snapshot_files": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "bytes",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "bytes": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "sha256": {
+                "$ref": "#/$defs/sha256"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "snapshot_file_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "snapshot_total_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "web_search_enabled": {
+      "const": false
+    },
+    "subagents_enabled": {
+      "const": false
+    },
+    "live_repository_write_access": {
+      "const": false
+    },
+    "restricted_path_check": {
+      "type": "string"
+    },
+    "provenance_note": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "provenance_level": {
+            "const": "complete_v1"
+          }
+        },
+        "required": [
+          "provenance_level"
+        ]
+      },
+      "then": {
+        "required": [
+          "timestamp_utc",
+          "requested_tool",
+          "requested_model",
+          "requested_reasoning_effort",
+          "repository_commit",
+          "source_worktree_state",
+          "task_sha256",
+          "effective_config_sha256",
+          "bridge_code_sha256",
+          "task_schema_sha256",
+          "review_schema_sha256",
+          "provenance_schema_sha256",
+          "snapshot_manifest_sha256",
+          "snapshot_files"
+        ],
+        "properties": {
+          "snapshot_files": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/snapshot_file"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "snapshot_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

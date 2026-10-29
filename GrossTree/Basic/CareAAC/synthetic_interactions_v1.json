@@ -1,0 +1,244 @@
+{
+  "schemaVersion": "1.0.0",
+  "suiteId": "CARE-SYNTH-INTERACTIONS-V1",
+  "dataClassification": "synthetic_no_participant_data",
+  "scenarioKind": "synthetic_state_transition",
+  "participantRecords": 0,
+  "persistence": false,
+  "scenarios": [
+    {
+      "id": "SYN-INT-001",
+      "purpose": "direct_confirmation",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "basic-needs",
+          "expect": {
+            "contextId": "basic-needs",
+            "panelId": "basic-essential",
+            "confirmed": false,
+            "statusCode": "context_selected"
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "need-water",
+          "expect": {
+            "pendingConceptId": "need-water",
+            "confirmed": false,
+            "statusCode": "candidate_pending"
+          }
+        },
+        {
+          "action": "CONFIRM",
+          "expect": {
+            "pendingConceptId": null,
+            "confirmedConceptId": "need-water",
+            "confirmed": true,
+            "statusCode": "message_confirmed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-002",
+      "purpose": "rejection_and_correction",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "conversation",
+          "expect": {
+            "panelId": "conversation-repair"
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "conversation-repeat",
+          "expect": {
+            "pendingConceptId": "conversation-repeat",
+            "confirmed": false
+          }
+        },
+        {
+          "action": "REJECT",
+          "expect": {
+            "pendingConceptId": null,
+            "confirmed": false,
+            "statusCode": "candidate_rejected"
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "conversation-slower",
+          "expect": {
+            "pendingConceptId": "conversation-slower"
+          }
+        },
+        {
+          "action": "CONFIRM",
+          "expect": {
+            "confirmedConceptId": "conversation-slower",
+            "confirmed": true
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-003",
+      "purpose": "panel_navigation_and_compact_surface",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "basic-needs",
+          "expect": {
+            "panelId": "basic-essential"
+          }
+        },
+        {
+          "action": "NEXT_PANEL",
+          "expect": {
+            "panelId": "basic-routine",
+            "confirmed": false,
+            "statusCode": "next_panel"
+          }
+        },
+        {
+          "action": "SET_SURFACE",
+          "surfaceMode": "compact",
+          "expect": {
+            "surfaceMode": "compact",
+            "confirmed": false
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "routine-sit-up",
+          "expect": {
+            "pendingConceptId": "routine-sit-up",
+            "surfaceMode": "compact"
+          }
+        },
+        {
+          "action": "CONFIRM",
+          "expect": {
+            "confirmedConceptId": "routine-sit-up",
+            "confirmed": true,
+            "surfaceMode": "compact"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-004",
+      "purpose": "none_to_fallback",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "comfort",
+          "expect": {
+            "contextId": "comfort"
+          }
+        },
+        {
+          "action": "NONE",
+          "expect": {
+            "pendingConceptId": null,
+            "confirmed": false,
+            "statusCode": "no_candidate_matches"
+          }
+        },
+        {
+          "action": "FALLBACK",
+          "expect": {
+            "contextId": null,
+            "confirmed": false,
+            "fallbackActive": true,
+            "statusCode": "fallback_active"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-005",
+      "purpose": "repeat_is_non_output",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "social",
+          "expect": {
+            "panelId": "social-connection"
+          }
+        },
+        {
+          "action": "REPEAT",
+          "expect": {
+            "panelId": "social-connection",
+            "pendingConceptId": null,
+            "confirmed": false,
+            "statusCode": "panel_repeated"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-006",
+      "purpose": "cancel_clears_state",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "assistance",
+          "expect": {
+            "contextId": "assistance"
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "assistance-closer",
+          "expect": {
+            "pendingConceptId": "assistance-closer"
+          }
+        },
+        {
+          "action": "CONFIRM",
+          "expect": {
+            "confirmed": true,
+            "confirmedConceptId": "assistance-closer"
+          }
+        },
+        {
+          "action": "CANCEL",
+          "expect": {
+            "contextId": null,
+            "pendingConceptId": null,
+            "confirmedConceptId": null,
+            "confirmed": false,
+            "fallbackActive": false,
+            "statusCode": "cancelled"
+          }
+        }
+      ]
+    },
+    {
+      "id": "SYN-INT-007",
+      "purpose": "hidden_concept_rejected",
+      "steps": [
+        {
+          "action": "SELECT_CONTEXT",
+          "contextId": "basic-needs",
+          "expect": {
+            "panelId": "basic-essential"
+          }
+        },
+        {
+          "action": "PROPOSE",
+          "conceptId": "control-stop",
+          "expect": {
+            "pendingConceptId": null,
+            "confirmed": false,
+            "statusCode": "concept_not_visible"
+          }
+        }
+      ]
+    }
+  ]
+}

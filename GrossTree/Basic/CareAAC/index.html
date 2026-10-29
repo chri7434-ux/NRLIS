@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f5f7">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'none'; media-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+    <meta name="referrer" content="no-referrer">
+    <title>NRLIS Care · 沟通选择板</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="synthetic_vocabulary_v1.js"></script>
+    <script defer src="interaction_core.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body data-mode="care_nonresearch" data-recording="false" data-persistence="false" data-ui-version="0.3.0">
+    <a class="skip-link" href="#candidate-panel">跳到候选区</a>
+    <header class="app-header">
+      <div class="header-inner">
+        <div class="brand" aria-label="NRLIS Care">
+          <span class="brand-mark" aria-hidden="true" data-icon="speech"></span>
+          <span>NRLIS <span class="brand-detail">Care</span></span>
+        </div>
+        <div class="privacy-status" aria-label="隐私状态：无录音、无上传、无保存">
+          <span data-icon="shield" aria-hidden="true"></span>
+          <span>只在此刻，只在此页</span>
+        </div>
+        <button id="scan-toggle" class="header-button" data-scan-toggle type="button" aria-pressed="false">
+          <span data-icon="scan" aria-hidden="true"></span><span class="scan-label">开始扫描</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">沟通选择板</p>
+          <h1>此刻，想说什么？</h1>
+          <p class="subtitle">选一句，再确认。按照自己的节奏来。</p>
+        </div>
+        <p class="interaction-hint"><span data-icon="hand" aria-hidden="true"></span>每一句，都由你确认</p>
+      </div>
+
+      <div class="workspace">
+        <section class="context-panel" aria-labelledby="context-title">
+          <div class="sidebar-heading"><span class="step-number">1</span><h2 id="context-title">选择情境</h2></div>
+          <div id="context-grid" class="context-grid" role="group" aria-label="情境"></div>
+          <div class="sidebar-note"><span data-icon="speech" aria-hidden="true"></span><p>不着急。<br>也可以选择「都不是」。</p></div>
+        </section>
+
+        <div class="main-column">
+          <section id="candidate-panel" class="candidate-panel" aria-labelledby="candidate-title" tabindex="-1">
+            <div class="candidate-toolbar">
+              <div class="candidate-heading">
+                <p id="panel-position" class="eyebrow">第 2 步 · 选择短句</p>
+                <h2 id="candidate-title"><span id="panel-label">从一个情境开始</span></h2>
+                <p id="candidate-description">每次只看四个选项，慢慢选。</p>
+              </div>
+              <label class="surface-control" for="surface-mode"><span>显示方式</span>
+                <select id="surface-mode"><option value="canonical" selected>完整句</option><option value="compact">大字短句</option></select>
+              </label>
+            </div>
+            <div id="candidate-grid" class="candidate-grid" aria-live="polite"></div>
+            <div class="panel-navigation" role="group" aria-label="候选小组导航">
+              <button id="action-previous-panel" class="navigation-button" type="button" data-control-id="action-previous-panel"><span data-icon="chevronLeft" aria-hidden="true"></span>上一组</button>
+              <p id="panel-counter" class="panel-counter">— / —</p>
+              <button id="action-next-panel" class="navigation-button" type="button" data-control-id="action-next-panel">下一组<span data-icon="chevronRight" aria-hidden="true"></span></button>
+            </div>
+            <div class="always-controls" role="group" aria-label="始终可用的安全控制">
+              <button id="action-none" class="control-button none" type="button" data-control-id="action-none"><span data-icon="none" aria-hidden="true"></span>都不是</button>
+              <button id="action-repeat" class="control-button" type="button" data-control-id="action-repeat"><span data-icon="repeat" aria-hidden="true"></span>重复这些选项</button>
+              <button id="action-cancel" class="control-button cancel" type="button" data-control-id="action-cancel"><span data-icon="close" aria-hidden="true"></span>取消</button>
+              <button id="action-fallback" class="control-button" type="button" data-control-id="action-fallback"><span data-icon="board" aria-hidden="true"></span>转到非AI沟通板</button>
+            </div>
+          </section>
+
+          <section id="output-panel" class="output-panel" aria-labelledby="output-title" data-state="empty" tabindex="-1">
+            <div class="output-icon" aria-hidden="true" data-icon="speech"></div>
+            <div class="output-copy"><div class="output-heading"><h2 id="output-title">当前消息</h2><span id="output-badge" class="output-badge">等待确认</span></div>
+              <p id="confirmed-message" class="confirmed-message" aria-live="assertive">尚未确认任何消息</p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="support-row">
+        <div class="status-panel" aria-label="系统状态"><span class="status-dot" aria-hidden="true"></span><p id="status-message" role="status" aria-live="polite">已准备好。请选择一个情境。</p></div>
+        <details class="access-settings">
+          <summary><span data-icon="keyboard" aria-hidden="true"></span>操作帮助与设置<span data-icon="chevronDown" aria-hidden="true"></span></summary>
+          <div class="settings-content">
+            <h2>按你习惯的方式操作</h2>
+            <p><kbd>1</kbd> – <kbd>4</kbd> 选择短句，<kbd>Esc</kbd> 取消。</p>
+            <p>自动扫描时，按 <kbd>空格</kbd> 选择高亮项；每次选择都需要单独按键。</p>
+            <label class="scan-speed-control" for="scan-speed">扫描间隔<select id="scan-speed"><option value="4000">4 秒</option><option value="3000" selected>3 秒</option><option value="2000">2 秒</option></select></label>
+            <p class="settings-note">自动扫描不是眼动追踪。无录音 · 无上传 · 无保存。</p>
+          </div>
+        </details>
+      </div>
+      <aside class="safety-note" aria-labelledby="safety-title"><span data-icon="info" aria-hidden="true"></span><div><h2 id="safety-title">不能用于紧急或重要医疗决定</h2><p>情况紧急或突然变化时，请联系照护人员、医生或当地紧急服务。候选只是建议，请由使用者确认。</p></div></aside>
+    </main>
+
+    <dialog id="confirmation-panel" class="confirmation-panel" aria-labelledby="confirmation-title" aria-describedby="confirmation-description" hidden>
+      <div class="confirmation-content">
+        <div class="confirmation-symbol" data-icon="speech" aria-hidden="true"></div>
+        <p class="eyebrow">再确认一次</p>
+        <h2 id="confirmation-title" tabindex="-1">这是你想说的吗？</h2>
+        <p id="pending-message" class="pending-message"></p>
+        <p id="confirmation-description">请由使用者确认。照护者不要代为确认。</p>
+        <div class="confirmation-actions">
+          <button id="reject-button" class="reject-button" type="button" data-control-id="action-reject">不是这个</button>
+          <button id="confirm-button" class="confirm-button" type="button" data-control-id="action-confirm"><span data-icon="check" aria-hidden="true"></span>确认表达</button>
+        </div>
+        <div class="dialog-controls" role="group" aria-label="其他沟通方式">
+          <button type="button" data-dialog-action="none" data-control-id="action-none">都不是</button>
+          <button type="button" data-dialog-action="repeat" data-control-id="action-repeat">重复这些选项</button>
+          <button type="button" data-dialog-action="cancel" data-control-id="action-cancel">取消</button>
+          <button type="button" data-dialog-action="fallback" data-control-id="action-fallback">转到非AI沟通板</button>
+        </div>
+        <button class="dialog-scan-toggle" data-scan-toggle type="button" aria-pressed="false"><span data-icon="scan" aria-hidden="true"></span><span class="scan-label">开始扫描</span></button>
+      </div>
+    </dialog>
+    <footer><span>NRLIS Care</span><p>本地沟通演示 · 40 条 synthetic 通用短句 · 非研究 · 刷新即清除</p><span>无录音 · 无上传 · 无保存</span></footer>
+  </body>
+</html>

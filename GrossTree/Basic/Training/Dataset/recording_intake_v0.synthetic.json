@@ -1,0 +1,78 @@
+{
+  "schema_version": "0.1.0",
+  "record_type": "recording_intake_provenance",
+  "record_id": "SYN-R00000001",
+  "data_classification": "synthetic_no_participant_data",
+  "handling_state": "synthetic_fixture",
+  "participant_code": "SYN-P000",
+  "recording_context": {
+    "signal_kind": "audio",
+    "structure": "synthetic_structured_prompt",
+    "relative_time_bucket": "not_applicable_synthetic",
+    "collection_purpose": "synthetic_generation",
+    "language_or_dialect_recorded_here": false,
+    "exact_time_recorded_here": false,
+    "location_recorded_here": false
+  },
+  "speaker_context": {
+    "primary_speaker_count": 0,
+    "additional_speaker_presence": "not_applicable_synthetic",
+    "third_party_review_state": "not_applicable_synthetic"
+  },
+  "source_provenance": {
+    "source_record_id": "SYN-SOURCE-0001",
+    "original_filename_stored_here": false,
+    "filesystem_path_stored_here": false,
+    "content_stored_here": false,
+    "transcript_stored_here": false,
+    "external_store_record_id": null,
+    "integrity_record_id": null
+  },
+  "permission_scopes": {
+    "care_use": "not_applicable_synthetic",
+    "recognition_analysis": "not_applicable_synthetic",
+    "model_training": "not_applicable_synthetic",
+    "evaluation": "not_applicable_synthetic",
+    "voice_rendering": "not_applicable_synthetic",
+    "demonstration": "not_applicable_synthetic",
+    "publication": "not_applicable_synthetic",
+    "third_party_speech": "not_applicable_synthetic"
+  },
+  "reference_and_label": {
+    "reference_source": "none",
+    "transcript_status": "absent",
+    "semantic_label_status": "absent",
+    "candidate_influenced": false,
+    "scoring_eligible": false,
+    "training_eligible": false
+  },
+  "split": {
+    "session_group_id": "SYN-S0001",
+    "role": "unassigned",
+    "chronology_record": "not_applicable_synthetic",
+    "test_inspected": false,
+    "split_frozen": false
+  },
+  "authorizations": {
+    "human_ready_checkpoint": false,
+    "recording_ingest_authorized": false,
+    "analysis_authorized": false,
+    "training_authorized": false,
+    "participant_specific_inference_authorized": false,
+    "candidate_reveal_authorized": false,
+    "voice_rendering_authorized": false,
+    "public_release_authorized": false,
+    "external_determination_record_id": null,
+    "approved_storage_record_id": null
+  },
+  "disposition": {
+    "research_eligibility": "not_applicable_synthetic",
+    "allowed_action": "synthetic_validation_only",
+    "reason_codes": [
+      "SYNTHETIC_FIXTURE",
+      "NO_PARTICIPANT_DATA",
+      "NO_RESEARCH_AUTHORIZATION"
+    ],
+    "care_data_reuse_prohibited": true
+  }
+}

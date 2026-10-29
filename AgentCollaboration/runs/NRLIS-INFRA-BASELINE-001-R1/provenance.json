@@ -1,0 +1,16 @@
+{
+  "task_id": "NRLIS-INFRA-BASELINE-001-R1",
+  "provenance_level": "legacy_partial",
+  "bridge_version": "0.1.0",
+  "run_id": "8944b362-7107-4a32-9ecb-b981566071f6",
+  "source_mode": "temporary_read_only_snapshot",
+  "snapshot_file_count": 6,
+  "snapshot_total_bytes": 29859,
+  "web_search_enabled": false,
+  "subagents_enabled": false,
+  "live_repository_write_access": false,
+  "requested_model": "provider-default",
+  "observed_cli_default_model_after_review": "grok-4.5",
+  "requested_reasoning_effort": "provider-default",
+  "provenance_note": "This review preceded explicit model and reasoning-effort pinning. The cached CLI model listing later reported grok-4.5 as the default, but the exact serving tier was not emitted by bridge version 0.1.0. Bridge version 0.2.0 explicitly requests grok-4.5 with high reasoning effort for future calls."
+}

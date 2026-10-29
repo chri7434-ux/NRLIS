@@ -1,0 +1,57 @@
+name: Research or methodology task
+description: Propose a bounded, evidence-aware research task without participant data.
+title: "[Research] "
+labels:
+  - research
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Research question
+      description: State one bounded question and why it matters now.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope and non-goals
+      description: Identify the responsible workstream and explicit exclusions.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Existing evidence
+      description: Cite repository paths or primary sources without including private data.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: boundary
+    attributes:
+      label: Maximum generalization boundary
+      options:
+        - G0 - engineering functionality only
+        - G1 - session-specific feasibility
+        - G2 - within-person prospective feasibility
+        - G3 or higher - requires explicit independent review before work
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance checks
+      description: List deterministic checks and evidence needed to close the task.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Privacy confirmation
+      options:
+        - label: This issue contains no participant, private, raw, authentication, or identifying data.
+          required: true

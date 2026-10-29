@@ -1,0 +1,7 @@
+runs/*
+!runs/.gitkeep
+!runs/*/
+runs/*/*
+!runs/*/review.json
+!runs/*/provenance.json
+tmp/

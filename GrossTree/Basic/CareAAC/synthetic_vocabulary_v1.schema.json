@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-nrlis.local/schemas/care-aac-synthetic-vocabulary-v1.schema.json",
+  "title": "NRLIS Care-mode synthetic vocabulary architecture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "architectureVersion",
+    "mode",
+    "dataClassification",
+    "languageTag",
+    "recording",
+    "persistence",
+    "logging",
+    "externalNetwork",
+    "modelInference",
+    "personalization",
+    "dialectClaim",
+    "outputMode",
+    "defaultSurfaceMode",
+    "surfaceModes",
+    "candidateSetPolicy",
+    "safetyPolicy",
+    "globalActions",
+    "semanticDomains",
+    "contexts",
+    "concepts"
+  ],
+  "properties": {
+    "version": {"const": "0.2.0"},
+    "architectureVersion": {"const": "1.0.0"},
+    "mode": {"const": "care_nonresearch"},
+    "dataClassification": {"const": "synthetic_no_participant_data"},
+    "languageTag": {"const": "zh-CN"},
+    "recording": {"const": false},
+    "persistence": {"const": false},
+    "logging": {"const": false},
+    "externalNetwork": {"const": false},
+    "modelInference": {"const": false},
+    "personalization": {"const": "none"},
+    "dialectClaim": {"const": "none"},
+    "outputMode": {"const": "confirmed_visual_only"},
+    "defaultSurfaceMode": {"const": "canonical"},
+    "surfaceModes": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"enum": ["canonical", "compact"]}
+    },
+    "candidateSetPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panelSize",
+        "ordering",
+        "generation",
+        "modelReranking"
+      ],
+      "properties": {
+        "panelSize": {"const": 4},
+        "ordering": {"const": "fixed_versioned"},
+        "generation": {"const": "curated_lookup_only"},
+        "modelReranking": {"const": false}
+      }
+    },
+    "safetyPolicy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "confirmationRequired",
+        "autoConfirmation",
+        "freeTextGeneration",
+        "careDataResearchReuse",
+        "prohibitedDomains"
+      ],
+      "properties": {
+        "confirmationRequired": {"const": true},
+        "autoConfirmation": {"const": false},
+        "freeTextGeneration": {"const": false},
+        "careDataResearchReuse": {"const": false},
+        "prohibitedDomains": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "emergency_instruction",
+              "diagnosis",
+              "medication_or_treatment_decision",
+              "legal_decision",
+              "financial_decision",
+              "consent_or_capacity"
+            ]
+          }
+        }
+      }
+    },
+    "globalActions": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "action-none",
+          "action-repeat",
+          "action-cancel",
+          "action-fallback",
+          "action-previous-panel",
+          "action-next-panel"
+        ]
+      }
+    },
+    "semanticDomains": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "basic_need",
+          "daily_routine",
+          "physical_comfort",
+          "environment_control",
+          "conversation_repair",
+          "response",
+          "social_connection",
+          "leisure",
+          "assistance",
+          "interaction_control"
+        ]
+      }
+    },
+    "contexts": {
+      "type": "array",
+      "minItems": 5,
+      "items": {"$ref": "#/$defs/context"}
+    },
+    "concepts": {
+      "type": "array",
+      "minItems": 40,
+      "items": {"$ref": "#/$defs/concept"}
+    }
+  },
+  "$defs": {
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "hint", "panels"],
+      "properties": {
+        "id": {"type": "string", "pattern": "[a-z][a-z0-9-]{2,39}"},
+        "label": {"type": "string", "pattern": ".+"},
+        "hint": {"type": "string", "pattern": ".+"},
+        "panels": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/panel"}
+        }
+      }
+    },
+    "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "conceptIds"],
+      "properties": {
+        "id": {"type": "string", "pattern": "[a-z][a-z0-9-]{2,49}"},
+        "label": {"type": "string", "pattern": ".+"},
+        "conceptIds": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "[a-z][a-z0-9-]{2,49}"}
+        }
+      }
+    },
+    "concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "domain",
+        "speechAct",
+        "canonicalText",
+        "compactText",
+        "riskClass",
+        "confirmationPolicy",
+        "outputPolicy",
+        "provenance",
+        "meaningRevision"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "[a-z][a-z0-9-]{2,49}"},
+        "domain": {
+          "enum": [
+            "basic_need",
+            "daily_routine",
+            "physical_comfort",
+            "environment_control",
+            "conversation_repair",
+            "response",
+            "social_connection",
+            "leisure",
+            "assistance",
+            "interaction_control"
+          ]
+        },
+        "speechAct": {
+          "enum": [
+            "request",
+            "state",
+            "repair",
+            "response",
+            "social",
+            "control"
+          ]
+        },
+        "canonicalText": {"type": "string", "pattern": ".+"},
+        "compactText": {"type": "string", "pattern": ".+"},
+        "riskClass": {"const": "ordinary_care_low_risk"},
+        "confirmationPolicy": {"const": "always_required"},
+        "outputPolicy": {"const": "confirmed_visual_only"},
+        "provenance": {"const": "curated_synthetic"},
+        "meaningRevision": {"const": 1}
+      }
+    }
+  }
+}

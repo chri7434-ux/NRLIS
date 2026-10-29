@@ -1,0 +1,21 @@
+[mcp_servers.grok_collab]
+command = "node"
+args = ["AgentCollaboration/grok-mcp/server.mjs"]
+startup_timeout_sec = 10
+tool_timeout_sec = 600
+enabled = true
+required = false
+enabled_tools = [
+  "grok_project_review",
+  "grok_compare_hypotheses",
+  "grok_methodology_audit",
+]
+default_tools_approval_mode = "auto"
+
+[mcp_servers.grok_collab.env]
+GROK_MODEL = "grok-4.5"
+GROK_REASONING_EFFORT = "high"
+GROK_TIMEOUT_MS = "600000"
+GROK_MAX_FILES = "300"
+GROK_MAX_FILE_BYTES = "20000000"
+GROK_MAX_TOTAL_BYTES = "60000000"

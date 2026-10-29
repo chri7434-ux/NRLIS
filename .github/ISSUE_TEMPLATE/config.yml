@@ -1,0 +1,6 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: Sensitive, security, or participant-related matter
+    url: https://github.com/chri7434-ux/NRLIS/security/advisories/new
+    about: Do not place credentials, participant information, or private data in an issue.

@@ -1,0 +1,308 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-nrlis.local/schemas/recording-intake-v0.schema.json",
+  "title": "NRLIS participant-neutral recording intake and provenance record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "record_id",
+    "data_classification",
+    "handling_state",
+    "participant_code",
+    "recording_context",
+    "speaker_context",
+    "source_provenance",
+    "permission_scopes",
+    "reference_and_label",
+    "split",
+    "authorizations",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {"const": "0.1.0"},
+    "record_type": {"const": "recording_intake_provenance"},
+    "record_id": {
+      "type": "string",
+      "pattern": "(SYN-)?R[0-9]{8}"
+    },
+    "data_classification": {
+      "enum": [
+        "synthetic_no_participant_data",
+        "private_participant_metadata"
+      ]
+    },
+    "handling_state": {
+      "enum": [
+        "synthetic_fixture",
+        "quarantine_only",
+        "metadata_inventory_only"
+      ]
+    },
+    "participant_code": {
+      "type": "string",
+      "pattern": "(SYN-P|NRLIS-P)[0-9]{3}"
+    },
+    "recording_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "signal_kind",
+        "structure",
+        "relative_time_bucket",
+        "collection_purpose",
+        "language_or_dialect_recorded_here",
+        "exact_time_recorded_here",
+        "location_recorded_here"
+      ],
+      "properties": {
+        "signal_kind": {"const": "audio"},
+        "structure": {
+          "enum": [
+            "synthetic_structured_prompt",
+            "naturalistic_conversation",
+            "structured_prompt",
+            "historical_voice",
+            "unknown"
+          ]
+        },
+        "relative_time_bucket": {
+          "enum": [
+            "not_applicable_synthetic",
+            "pre_impairment",
+            "post_impairment",
+            "unknown"
+          ]
+        },
+        "collection_purpose": {
+          "enum": [
+            "synthetic_generation",
+            "ordinary_care_existing",
+            "structured_existing_nonresearch",
+            "research_specific_prospective",
+            "unknown"
+          ]
+        },
+        "language_or_dialect_recorded_here": {"const": false},
+        "exact_time_recorded_here": {"const": false},
+        "location_recorded_here": {"const": false}
+      }
+    },
+    "speaker_context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "primary_speaker_count",
+        "additional_speaker_presence",
+        "third_party_review_state"
+      ],
+      "properties": {
+        "primary_speaker_count": {"type": "integer", "minimum": 0},
+        "additional_speaker_presence": {
+          "enum": [
+            "not_applicable_synthetic",
+            "known_none",
+            "present",
+            "unknown"
+          ]
+        },
+        "third_party_review_state": {
+          "enum": [
+            "not_applicable_synthetic",
+            "not_required",
+            "unresolved",
+            "completed_external_record"
+          ]
+        }
+      }
+    },
+    "source_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_record_id",
+        "original_filename_stored_here",
+        "filesystem_path_stored_here",
+        "content_stored_here",
+        "transcript_stored_here",
+        "external_store_record_id",
+        "integrity_record_id"
+      ],
+      "properties": {
+        "source_record_id": {
+          "type": "string",
+          "pattern": "(SYN-SOURCE|PRIVATE-SOURCE)-[A-Z0-9-]+"
+        },
+        "original_filename_stored_here": {"const": false},
+        "filesystem_path_stored_here": {"const": false},
+        "content_stored_here": {"const": false},
+        "transcript_stored_here": {"const": false},
+        "external_store_record_id": {
+          "type": ["string", "null"],
+          "pattern": "EXTSTORE-[A-Z0-9-]+"
+        },
+        "integrity_record_id": {
+          "type": ["string", "null"],
+          "pattern": "INTEGRITY-[A-Z0-9-]+"
+        }
+      }
+    },
+    "permission_scopes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "care_use",
+        "recognition_analysis",
+        "model_training",
+        "evaluation",
+        "voice_rendering",
+        "demonstration",
+        "publication",
+        "third_party_speech"
+      ],
+      "properties": {
+        "care_use": {"$ref": "#/$defs/permission_state"},
+        "recognition_analysis": {"$ref": "#/$defs/permission_state"},
+        "model_training": {"$ref": "#/$defs/permission_state"},
+        "evaluation": {"$ref": "#/$defs/permission_state"},
+        "voice_rendering": {"$ref": "#/$defs/permission_state"},
+        "demonstration": {"$ref": "#/$defs/permission_state"},
+        "publication": {"$ref": "#/$defs/permission_state"},
+        "third_party_speech": {"$ref": "#/$defs/permission_state"}
+      }
+    },
+    "reference_and_label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_source",
+        "transcript_status",
+        "semantic_label_status",
+        "candidate_influenced",
+        "scoring_eligible",
+        "training_eligible"
+      ],
+      "properties": {
+        "reference_source": {
+          "enum": [
+            "none",
+            "participant_independent_pre_reveal",
+            "known_prompt_participant_accepted",
+            "participant_selected_post_reveal",
+            "clinician_documented",
+            "care_partner_interpreted",
+            "researcher_inferred",
+            "model_generated"
+          ]
+        },
+        "transcript_status": {
+          "enum": ["absent", "private_unverified", "private_verified"]
+        },
+        "semantic_label_status": {
+          "enum": ["absent", "private_unverified", "private_verified"]
+        },
+        "candidate_influenced": {"type": "boolean"},
+        "scoring_eligible": {"const": false},
+        "training_eligible": {"const": false}
+      }
+    },
+    "split": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "session_group_id",
+        "role",
+        "chronology_record",
+        "test_inspected",
+        "split_frozen"
+      ],
+      "properties": {
+        "session_group_id": {
+          "type": "string",
+          "pattern": "(SYN-)?S[0-9]{4}"
+        },
+        "role": {
+          "enum": ["quarantine", "unassigned", "development", "calibration", "test"]
+        },
+        "chronology_record": {
+          "enum": ["not_applicable_synthetic", "absent", "private_external_record"]
+        },
+        "test_inspected": {"const": false},
+        "split_frozen": {"const": false}
+      }
+    },
+    "authorizations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "human_ready_checkpoint",
+        "recording_ingest_authorized",
+        "analysis_authorized",
+        "training_authorized",
+        "participant_specific_inference_authorized",
+        "candidate_reveal_authorized",
+        "voice_rendering_authorized",
+        "public_release_authorized",
+        "external_determination_record_id",
+        "approved_storage_record_id"
+      ],
+      "properties": {
+        "human_ready_checkpoint": {"const": false},
+        "recording_ingest_authorized": {"const": false},
+        "analysis_authorized": {"const": false},
+        "training_authorized": {"const": false},
+        "participant_specific_inference_authorized": {"const": false},
+        "candidate_reveal_authorized": {"const": false},
+        "voice_rendering_authorized": {"const": false},
+        "public_release_authorized": {"const": false},
+        "external_determination_record_id": {
+          "type": ["string", "null"],
+          "pattern": "EXT-[A-Z0-9-]+"
+        },
+        "approved_storage_record_id": {
+          "type": ["string", "null"],
+          "pattern": "STORE-APPROVAL-[A-Z0-9-]+"
+        }
+      }
+    },
+    "disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "research_eligibility",
+        "allowed_action",
+        "reason_codes",
+        "care_data_reuse_prohibited"
+      ],
+      "properties": {
+        "research_eligibility": {
+          "enum": ["not_applicable_synthetic", "not_assessed", "not_eligible"]
+        },
+        "allowed_action": {
+          "enum": [
+            "synthetic_validation_only",
+            "retain_in_non_git_quarantine_only",
+            "metadata_inventory_only"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "[A-Z0-9_]+"}
+        },
+        "care_data_reuse_prohibited": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "permission_state": {
+      "enum": [
+        "not_applicable_synthetic",
+        "not_determined",
+        "not_authorized"
+      ]
+    }
+  }
+}

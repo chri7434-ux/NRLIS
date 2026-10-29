@@ -1,0 +1,43 @@
+{
+  "claim_boundary": "participant_free_neural_training_plumbing_only",
+  "data_classification": "synthetic_no_participant_data",
+  "expected_calibration_error": 0.045783984683,
+  "hazardous_non_abstention_rate": {
+    "denominator": 48,
+    "numerator": 3,
+    "value": 0.0625
+  },
+  "multiclass_brier_score": 0.186273713097,
+  "safety": {
+    "all_outputs_disabled": true,
+    "candidate_reveal_count": 0,
+    "output_bypass_count": 0,
+    "participant_example_count": 0
+  },
+  "selected_temperature": 2.5,
+  "selective_accuracy": {
+    "denominator": 41,
+    "numerator": 38,
+    "value": 0.926829268293
+  },
+  "split_counts": {
+    "calibration": 32,
+    "development": 96,
+    "test": 48
+  },
+  "test_abstention_rate": {
+    "denominator": 48,
+    "numerator": 7,
+    "value": 0.145833333333
+  },
+  "test_accuracy": {
+    "denominator": 48,
+    "numerator": 42,
+    "value": 0.875
+  },
+  "test_top2_coverage": {
+    "denominator": 48,
+    "numerator": 47,
+    "value": 0.979166666667
+  }
+}

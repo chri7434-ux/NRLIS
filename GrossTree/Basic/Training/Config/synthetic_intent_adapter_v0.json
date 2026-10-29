@@ -1,0 +1,30 @@
+{
+  "adapter_id": "NRLIS-SYN-INTENT-v0",
+  "version": "0.1.0",
+  "data_classification": "synthetic_no_participant_data",
+  "claim_boundary": "synthetic_model_to_concept_routing_only",
+  "source_config_sha256": "4d0e411d622178b6a65ad4b31d5b17fcd5ba90977bc49efc254305e7c25ffdc6",
+  "vocabulary_sha256": "e8a044c5f72c2fd06dd87bd97a845b7275b3330ba07370aa7293a8df9c49db5a",
+  "labels": [
+    "SYN-SEM-WATER",
+    "SYN-SEM-PAIN",
+    "SYN-SEM-REPOSITION",
+    "SYN-SEM-OTHER"
+  ],
+  "label_to_concept": {
+    "SYN-SEM-WATER": "need-water",
+    "SYN-SEM-PAIN": null,
+    "SYN-SEM-REPOSITION": "comfort-position",
+    "SYN-SEM-OTHER": null
+  },
+  "minimum_probability": 0.65,
+  "minimum_margin": 0.25,
+  "candidate_probability_floor": 0.1,
+  "maximum_candidates": 2,
+  "probability_policy": "full_class_no_renormalization",
+  "panel_policy": "global_top_must_be_in_requested_panel",
+  "participant_inputs_permitted": false,
+  "candidate_reveal_permitted": false,
+  "care_ui_connection_permitted": false,
+  "output_action": "no_action_shadow_only"
+}

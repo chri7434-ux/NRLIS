@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-nrlis.local/schemas/synthetic-intent-adapter-v0.schema.json",
+  "title": "Frozen synthetic intent adapter, sealed score packet and decision contracts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "adapter_id",
+    "version",
+    "data_classification",
+    "claim_boundary",
+    "source_config_sha256",
+    "vocabulary_sha256",
+    "labels",
+    "label_to_concept",
+    "minimum_probability",
+    "minimum_margin",
+    "candidate_probability_floor",
+    "maximum_candidates",
+    "probability_policy",
+    "panel_policy",
+    "participant_inputs_permitted",
+    "candidate_reveal_permitted",
+    "care_ui_connection_permitted",
+    "output_action"
+  ],
+  "properties": {
+    "adapter_id": {
+      "type": "string",
+      "const": "NRLIS-SYN-INTENT-v0"
+    },
+    "version": {
+      "type": "string",
+      "const": "0.1.0"
+    },
+    "data_classification": {
+      "type": "string",
+      "const": "synthetic_no_participant_data"
+    },
+    "claim_boundary": {
+      "type": "string",
+      "const": "synthetic_model_to_concept_routing_only"
+    },
+    "source_config_sha256": {
+      "type": "string",
+      "const": "4d0e411d622178b6a65ad4b31d5b17fcd5ba90977bc49efc254305e7c25ffdc6"
+    },
+    "vocabulary_sha256": {
+      "type": "string",
+      "const": "e8a044c5f72c2fd06dd87bd97a845b7275b3330ba07370aa7293a8df9c49db5a"
+    },
+    "labels": {
+      "type": "array",
+      "const": [
+        "SYN-SEM-WATER",
+        "SYN-SEM-PAIN",
+        "SYN-SEM-REPOSITION",
+        "SYN-SEM-OTHER"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "label_to_concept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SYN-SEM-WATER",
+        "SYN-SEM-PAIN",
+        "SYN-SEM-REPOSITION",
+        "SYN-SEM-OTHER"
+      ],
+      "properties": {
+        "SYN-SEM-WATER": {
+          "type": "string",
+          "const": "need-water"
+        },
+        "SYN-SEM-PAIN": {
+          "type": "null",
+          "const": null
+        },
+        "SYN-SEM-REPOSITION": {
+          "type": "string",
+          "const": "comfort-position"
+        },
+        "SYN-SEM-OTHER": {
+          "type": "null",
+          "const": null
+        }
+      }
+    },
+    "minimum_probability": {
+      "type": "number",
+      "const": 0.65
+    },
+    "minimum_margin": {
+      "type": "number",
+      "const": 0.25
+    },
+    "candidate_probability_floor": {
+      "type": "number",
+      "const": 0.1
+    },
+    "maximum_candidates": {
+      "type": "integer",
+      "const": 2
+    },
+    "probability_policy": {
+      "type": "string",
+      "const": "full_class_no_renormalization"
+    },
+    "panel_policy": {
+      "type": "string",
+      "const": "global_top_must_be_in_requested_panel"
+    },
+    "participant_inputs_permitted": {
+      "type": "boolean",
+      "const": false
+    },
+    "candidate_reveal_permitted": {
+      "type": "boolean",
+      "const": false
+    },
+    "care_ui_connection_permitted": {
+      "type": "boolean",
+      "const": false
+    },
+    "output_action": {
+      "type": "string",
+      "const": "no_action_shadow_only"
+    }
+  },
+  "$defs": {
+    "packet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_classification",
+        "source_config_sha256",
+        "vocabulary_sha256",
+        "calibration_sha256",
+        "labels",
+        "probabilities"
+      ],
+      "properties": {
+        "data_classification": {
+          "type": "string",
+          "const": "synthetic_no_participant_data"
+        },
+        "source_config_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "vocabulary_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "calibration_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "labels": {
+          "type": "array",
+          "const": [
+            "SYN-SEM-WATER",
+            "SYN-SEM-PAIN",
+            "SYN-SEM-REPOSITION",
+            "SYN-SEM-OTHER"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "probabilities": {
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "data_classification",
+        "claim_boundary",
+        "decision",
+        "reason",
+        "context_id",
+        "panel_id",
+        "candidates",
+        "required_controls",
+        "confirmation_required",
+        "candidate_reveal_permitted",
+        "care_ui_connection_permitted",
+        "output_action"
+      ],
+      "properties": {
+        "data_classification": {
+          "type": "string",
+          "const": "synthetic_no_participant_data"
+        },
+        "claim_boundary": {
+          "type": "string",
+          "const": "synthetic_model_to_concept_routing_only"
+        },
+        "decision": {
+          "type": "string",
+          "enum": [
+            "candidates",
+            "abstain"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "eligible",
+            "unmapped_top_class",
+            "top_outside_panel",
+            "below_probability",
+            "below_margin"
+          ]
+        },
+        "context_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{2,49}$"
+        },
+        "panel_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{2,49}$"
+        },
+        "candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "concept_id",
+              "probability"
+            ],
+            "properties": {
+              "concept_id": {
+                "type": "string",
+                "enum": [
+                  "need-water",
+                  "comfort-position"
+                ]
+              },
+              "probability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          }
+        },
+        "required_controls": {
+          "type": "array",
+          "const": [
+            "none_of_these",
+            "repeat",
+            "cancel",
+            "non_predictive_fallback"
+          ],
+          "items": {
+            "type": "string"
+          }
+        },
+        "confirmation_required": {
+          "type": "boolean",
+          "const": true
+        },
+        "candidate_reveal_permitted": {
+          "type": "boolean",
+          "const": false
+        },
+        "care_ui_connection_permitted": {
+          "type": "boolean",
+          "const": false
+        },
+        "output_action": {
+          "type": "string",
+          "const": "no_action_shadow_only"
+        }
+      }
+    }
+  }
+}

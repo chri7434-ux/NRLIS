@@ -1,0 +1,14 @@
+{
+  "name": "nrlis-agent-collaboration",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "validate:artifacts": "node scripts/validate-artifacts.mjs"
+  },
+  "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1"
+  }
+}

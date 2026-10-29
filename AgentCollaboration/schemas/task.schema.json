@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nrlis.local/schemas/collaboration-task.schema.json",
+  "title": "NRLIS collaboration task",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "question",
+    "paths",
+    "requested_tool",
+    "claim_boundary",
+    "prohibited_actions",
+    "acceptance_checks"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+    },
+    "question": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 8000
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 40,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 300
+      }
+    },
+    "requested_tool": {
+      "enum": [
+        "grok_project_review",
+        "grok_compare_hypotheses",
+        "grok_methodology_audit"
+      ]
+    },
+    "review_mode": {
+      "enum": [
+        "general",
+        "methodology",
+        "evidence",
+        "safety",
+        "implementation"
+      ],
+      "default": "general"
+    },
+    "hypotheses": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 2000
+      }
+    },
+    "claim_boundary": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 2000
+    },
+    "prohibited_actions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 500
+      }
+    },
+    "acceptance_checks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 500
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "requested_tool": {
+            "const": "grok_compare_hypotheses"
+          }
+        },
+        "required": [
+          "requested_tool"
+        ]
+      },
+      "then": {
+        "required": [
+          "hypotheses"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "hypotheses"
+          ]
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "requested_tool": {
+            "const": "grok_project_review"
+          }
+        },
+        "required": [
+          "requested_tool"
+        ]
+      },
+      "else": {
+        "not": {
+          "required": [
+            "review_mode"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nrlis.local/schemas/grok-review.schema.json",
+  "title": "NRLIS Grok independent review",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "status",
+    "conclusion",
+    "evidence",
+    "counterarguments",
+    "uncertainties",
+    "recommended_checks",
+    "boundary_flags",
+    "files_examined"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "supported",
+        "partially_supported",
+        "not_supported",
+        "insufficient_evidence",
+        "blocked_by_boundary"
+      ]
+    },
+    "conclusion": {
+      "type": "string"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "support",
+          "source_path",
+          "locator",
+          "evidence_status",
+          "generalization_level"
+        ],
+        "properties": {
+          "claim": {
+            "type": "string"
+          },
+          "support": {
+            "type": "string"
+          },
+          "source_path": {
+            "type": "string"
+          },
+          "locator": {
+            "type": "string"
+          },
+          "evidence_status": {
+            "enum": [
+              "repository_evidence",
+              "local_primary",
+              "external_primary_reference",
+              "project_evidence",
+              "hypothesis",
+              "not_evidence"
+            ]
+          },
+          "generalization_level": {
+            "enum": [
+              "none",
+              "G0",
+              "G1",
+              "G2",
+              "G3",
+              "G4",
+              "G5"
+            ]
+          }
+        }
+      }
+    },
+    "counterarguments": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommended_checks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "boundary_flags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "files_examined": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

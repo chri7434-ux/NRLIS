@@ -1,0 +1,45 @@
+{
+  "version": "0.1.0",
+  "data_classification": "synthetic_no_participant_data",
+  "claim_boundary": "synthetic_model_to_concept_routing_only",
+  "source_test_examples": 48,
+  "synthetic_panel_contexts": 10,
+  "route_count": 480,
+  "mapped_source_classes": 2,
+  "unmapped_source_classes": 2,
+  "selected_temperature": 2.5,
+  "reason_counts": {
+    "below_probability": 4,
+    "eligible": 17,
+    "top_outside_panel": 189,
+    "unmapped_top_class": 270
+  },
+  "route_candidate_coverage": {
+    "numerator": 17,
+    "denominator": 480,
+    "value": 0.035416666667
+  },
+  "route_reference_coverage": {
+    "numerator": 16,
+    "denominator": 480,
+    "value": 0.033333333333
+  },
+  "route_selective_error": {
+    "numerator": 1,
+    "denominator": 17,
+    "value": 0.058823529412
+  },
+  "safety": {
+    "participant_examples": 0,
+    "care_ui_connections": 0,
+    "candidate_reveals": 0,
+    "output_bypasses": 0
+  },
+  "limitations": [
+    "crossed_panel_routes_are_dependent_not_independent_samples",
+    "two_mapped_classes_not_forty_concept_recognition",
+    "synthetic_embeddings_not_speech_features",
+    "no_participant_or_clinical_performance_established",
+    "temperature_scaling_does_not_guarantee_calibration"
+  ]
+}

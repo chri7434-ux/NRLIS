@@ -1,0 +1,117 @@
+name: Repository Governance
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-governance-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  repository-governance:
+    name: Repository governance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: AgentCollaboration/package-lock.json
+
+      - name: Install Python validation dependencies
+        run: python3 -m pip install --requirement requirements.txt
+
+      - name: Audit append-only project change log
+        run: python3 scripts/audit_change_log.py
+
+      - name: Audit content index
+        run: python3 scripts/audit_content_index.py
+
+      - name: Audit repository safety
+        run: python3 scripts/audit_repository_safety.py
+
+      - name: Check Python syntax
+        run: |
+          python3 -m py_compile \
+            GrossTree/Basic/Training/Implementation/synthetic_g0.py \
+            GrossTree/Basic/Training/Implementation/test_synthetic_g0.py \
+            GrossTree/Basic/Training/Implementation/synthetic_intent_adapter.py \
+            GrossTree/Basic/Training/Implementation/test_synthetic_intent_adapter.py \
+            GrossTree/Basic/Training/Implementation/participant_free_neural.py \
+            GrossTree/Basic/Training/Implementation/test_participant_free_neural.py \
+            GrossTree/Basic/Training/Implementation/validate_recording_intake.py \
+            GrossTree/Basic/Training/Implementation/test_validate_recording_intake.py \
+            GrossTree/Basic/Training/Implementation/validate_wp1.py \
+            GrossTree/Basic/Training/Implementation/test_validate_wp1.py \
+            GrossTree/Basic/CareAAC/validate_care_architecture.py \
+            GrossTree/Basic/CareAAC/test_validate_care_architecture.py \
+            GrossTree/Basic/CareAAC/test_care_aac.py \
+            scripts/audit_change_log.py \
+            scripts/audit_content_index.py \
+            scripts/audit_repository_safety.py
+
+      - name: Install collaboration and WP1 schema dependencies
+        run: npm ci --prefix AgentCollaboration --ignore-scripts
+
+      - name: Verify synthetic G0 and combined WP1 gate layers
+        run: |
+          python3 -m unittest discover \
+            -s GrossTree/Basic/Training/Implementation \
+            -p 'test_*.py' -v
+          python3 GrossTree/Basic/Training/Implementation/synthetic_g0.py check
+          python3 GrossTree/Basic/Training/Implementation/participant_free_neural.py check
+          python3 GrossTree/Basic/Training/Implementation/synthetic_intent_adapter.py check
+          python3 GrossTree/Basic/Training/Implementation/validate_recording_intake.py check
+          python3 GrossTree/Basic/Training/Implementation/validate_wp1.py check
+          python3 GrossTree/Basic/CareAAC/validate_care_architecture.py check
+          python3 -m unittest discover \
+            -s GrossTree/Basic/CareAAC \
+            -p 'test_*.py' -v
+          node --test GrossTree/Basic/CareAAC/test_interaction_core.mjs
+
+      - name: Validate schemas and bounded artifacts
+        run: npm --prefix AgentCollaboration run validate:artifacts
+
+      - name: Check JavaScript syntax
+        run: |
+          node --check AgentCollaboration/grok-mcp/server.mjs
+          node --check AgentCollaboration/scripts/smoke-test.mjs
+          node --check AgentCollaboration/scripts/validate-artifacts.mjs
+          node --check AgentCollaboration/tests/bridge.test.mjs
+          node --check AgentCollaboration/tests/fake-grok.mjs
+          node --check GrossTree/Basic/CareAAC/synthetic_vocabulary_v0.js
+          node --check GrossTree/Basic/CareAAC/synthetic_vocabulary_v1.js
+          node --check GrossTree/Basic/CareAAC/interaction_core.js
+          node --check GrossTree/Basic/CareAAC/app.js
+          node --check GrossTree/Basic/CareAAC/test_interaction_core.mjs
+
+      - name: Check shell syntax
+        run: |
+          bash -n scripts/install_git_hooks.sh
+          bash -n scripts/git-hooks/pre-push
+
+      - name: Test fail-closed collaboration bridge
+        run: |
+          npm --prefix AgentCollaboration test
+          node AgentCollaboration/scripts/smoke-test.mjs

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-nrlis.local/schemas/participant-free-neural-v0.schema.json",
+  "title": "NRLIS participant-free neural baseline configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "config_id",
+    "config_version",
+    "data_classification",
+    "claim_boundary",
+    "seed",
+    "labels",
+    "input",
+    "model",
+    "calibration",
+    "abstention",
+    "safety"
+  ],
+  "properties": {
+    "config_id": {"const": "NRLIS-PFNN-v0"},
+    "config_version": {"const": "0.1.0"},
+    "data_classification": {"const": "synthetic_no_participant_data"},
+    "claim_boundary": {"const": "participant_free_neural_training_plumbing_only"},
+    "seed": {"type": "integer", "minimum": 0},
+    "labels": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "SYN-SEM-[A-Z0-9_-]+"}
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "dimensions", "samples_per_label", "noise_scale", "class_centers"],
+      "properties": {
+        "kind": {"const": "synthetic_acoustic_embedding"},
+        "dimensions": {"type": "integer", "minimum": 2},
+        "samples_per_label": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["development", "calibration", "test"],
+          "properties": {
+            "development": {"type": "integer", "minimum": 1},
+            "calibration": {"type": "integer", "minimum": 1},
+            "test": {"type": "integer", "minimum": 1}
+          }
+        },
+        "noise_scale": {"type": "number", "minimum": 0},
+        "class_centers": {
+          "type": "object",
+          "minProperties": 2,
+          "additionalProperties": {
+            "type": "array",
+            "minItems": 2,
+            "items": {"type": "number"}
+          }
+        }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["family", "hidden_units", "epochs", "learning_rate", "l2"],
+      "properties": {
+        "family": {"const": "two_layer_mlp"},
+        "hidden_units": {"type": "integer", "minimum": 1},
+        "epochs": {"type": "integer", "minimum": 1},
+        "learning_rate": {"type": "number", "minimum": 0},
+        "l2": {"type": "number", "minimum": 0}
+      }
+    },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["method", "temperature_grid"],
+      "properties": {
+        "method": {"const": "temperature_grid"},
+        "temperature_grid": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "number", "minimum": 0.01}
+        }
+      }
+    },
+    "abstention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["minimum_probability", "minimum_margin"],
+      "properties": {
+        "minimum_probability": {"type": "number", "minimum": 0, "maximum": 1},
+        "minimum_margin": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    },
+    "safety": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participant_data_permitted",
+        "participant_specific_inference_permitted",
+        "candidate_reveal_permitted",
+        "output_action"
+      ],
+      "properties": {
+        "participant_data_permitted": {"const": false},
+        "participant_specific_inference_permitted": {"const": false},
+        "candidate_reveal_permitted": {"const": false},
+        "output_action": {"const": "no_action_shadow_only"}
+      }
+    }
+  }
+}
