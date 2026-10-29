@@ -882,3 +882,19 @@ consistently; this log uses ascending order.
 - Project state: Private development history -> public, participant-free
   snapshot of interface v0.3.0 and WP2.3. All evidence remains synthetic (G0).
 
+### CHG-0030 - Public repository CI fixes
+
+- Event time: 2026-10-30 CST (+0800)
+- Modification time: 2026-10-30 CST (+0800)
+- Changed paths:
+  - `scripts/audit_change_log.py`
+  - `.github/dependabot.yml` (removed)
+  - `CONTENT_OF_WORK.md`
+  - `PROJECT_CHANGE_LOG.md`
+- Brief: The change-log audit now treats a push of a root commit (no parent)
+  as a new baseline instead of failing on the missing `HEAD^`. Removed the
+  Dependabot configuration from the public snapshot.
+- Validation: Change-log, content-index and repository-safety audits, all
+  Python and Node test suites and all `check` commands re-run.
+- Project state: Public snapshot CI failing on root commit -> CI passing.
+

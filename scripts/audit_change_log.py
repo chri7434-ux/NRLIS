@@ -68,7 +68,13 @@ def base_for_environment(explicit: str | None) -> str | None:
         if branch:
             return f"origin/{branch}"
     if os.environ.get("GITHUB_EVENT_NAME") == "push":
-        return "HEAD^"
+        parent = subprocess.run(
+            ["git", "rev-parse", "--verify", "--quiet", "HEAD^"],
+            cwd=ROOT,
+            capture_output=True,
+        )
+        # A root commit has no parent; it is audited as a new baseline.
+        return "HEAD^" if parent.returncode == 0 else None
     return None
 
 

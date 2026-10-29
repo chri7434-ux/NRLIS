@@ -108,7 +108,6 @@ a new folder.
 | File | Purpose | Status |
 |---|---|---|
 | `.github/workflows/repository-governance.yml` | Installs pinned Python/YAML and schema dependencies, then runs append-only log, index, safety, syntax, WP1, deterministic/neural/intake synthetic/intent-routing checks, Care-mode vocabulary/scenario/state-machine tests, and fail-closed collaboration checks on PRs and `main` | Active |
-| `.github/dependabot.yml` | Maintains pinned GitHub Actions, root Python, and collaboration npm dependencies weekly | Active |
 | `.github/pull_request_template.md` | Requires scope, boundary, privacy, index, log, and validation attestations | Active |
 | `.github/ISSUE_TEMPLATE/config.yml` | Disables unstructured issues and routes sensitive matters to private reporting | Active |
 | `.github/ISSUE_TEMPLATE/research_task.yml` | Structured evidence- and boundary-aware research task intake | Active |
@@ -238,7 +237,6 @@ The audit tool reads only the paths between the following markers.
 - `.github/ISSUE_TEMPLATE/bug_report.yml`
 - `.github/ISSUE_TEMPLATE/config.yml`
 - `.github/ISSUE_TEMPLATE/research_task.yml`
-- `.github/dependabot.yml`
 - `.github/pull_request_template.md`
 - `.github/workflows/repository-governance.yml`
 - `.gitignore`
